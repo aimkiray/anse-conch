@@ -16,7 +16,7 @@ export const handlePrompt = async(conversation: Conversation, prompt?: string, s
   const [providerId, botId] = conversation.bot.split(':')
   const provider = getProviderById(providerId)
   if (!provider) return
-  let callMethod = generalSettings.requestWithBackend ? 'backend' : 'frontend' as 'frontend' | 'backend'
+  let callMethod = generalSettings.requestWithBackend !== false ? 'backend' : 'frontend' as 'frontend' | 'backend'
   if (provider.supportCallMethod === 'frontend' || provider.supportCallMethod === 'backend')
     callMethod = provider.supportCallMethod
 
@@ -97,7 +97,7 @@ export const handlePrompt = async(conversation: Conversation, prompt?: string, s
   }
 }
 
-const getProviderResponse = async(providerId: string, payload: HandlerPayload, options?: {
+const getProviderResponse = async(providerId: string, payload: HandlerPayload, options: {
   caller: 'frontend' | 'backend'
   signal?: AbortSignal
 }) => {
