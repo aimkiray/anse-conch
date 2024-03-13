@@ -4,6 +4,7 @@ import type { HandlerPayload } from '@/types/provider'
 import type { ErrorMessage } from '@/types/message'
 
 const apiKey = import.meta.env.OPENAI_API_KEY
+const baseUrl = import.meta.env.OPENAI_API_BASE_URL
 
 export const post: APIRoute = async({ params, request }) => {
   const providerId = params.provider as string
@@ -13,15 +14,10 @@ export const post: APIRoute = async({ params, request }) => {
     if (!providerId) throw new Error('Provider ID is required')
 
     if (providerId === 'provider-openai') {
-      const openAiApiKey = body.globalSettings.apiKey || apiKey
-      if (!openAiApiKey) {
-        return new Response(JSON.stringify({
-          error: 'OpenAI API key is not set',
-        }), {
-          status: 500,
-        })
+      if (!body.globalSettings.apiKey) {
+        body.globalSettings.apiKey = apiKey
+        body.globalSettings.baseUrl = baseUrl
       }
-      body.globalSettings.apiKey = apiKey
     }
 
     const providerResponse = await callProviderHandler(providerId, body)
