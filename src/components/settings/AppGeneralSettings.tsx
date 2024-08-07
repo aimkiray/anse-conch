@@ -19,7 +19,7 @@ export default (props: Props) => {
       key: 'requestWithBackend',
       name: t('settings.general.requestWithBackend'),
       type: 'toggle',
-      default: false,
+      default: true,
     },
     {
       key: 'locale',
